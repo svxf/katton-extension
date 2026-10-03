@@ -13,5 +13,3 @@ syntax highlighting, autocomplete, hover docs, linting and token export/import f
 1. download this repo
 2. do `vsce package`
 3. thats it
-
-also if ur wondering why theres so many github pages actions its bc im stupid and didn't realize i was doing it on the wrong repo
