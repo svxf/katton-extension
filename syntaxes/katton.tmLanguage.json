@@ -1,0 +1,59 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Katton",
+  "scopeName": "source.katton",
+  "fileTypes": ["kat"],
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#annotations" },
+    { "include": "#strings" },
+    { "include": "#function-decl" },
+    { "include": "#keywords" },
+    { "include": "#engine-objects" },
+    { "include": "#numbers" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.katton",
+          "match": "//.*$"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.katton",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.katton",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "numbers": {
+      "name": "constant.numeric.katton",
+      "match": "\\b\\d+(\\.\\d+)?\\b"
+    },
+    "annotations": {
+      "name": "entity.name.function.annotation.katton",
+      "match": "@Katton\\.(command|listen)\\b"
+    },
+    "function-decl": {
+      "match": "\\b(function)\\s+([A-Za-z_]\\w*)",
+      "captures": {
+        "1": { "name": "keyword.control.katton" },
+        "2": { "name": "entity.name.function.katton" }
+      }
+    },
+    "keywords": {
+      "name": "keyword.control.katton",
+      "match": "\\b(if|else|when|for|in|downTo|break|continue|function|val|var|return|null|true|false)\\b"
+    },
+    "engine-objects": {
+      "name": "support.class.katton",
+      "match": "\\b(Katton|Math|item|player|entity|event|world|sender|args)\\b"
+    }
+  }
+}
