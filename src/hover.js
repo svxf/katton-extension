@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 const { ENTRIES } = require('./data');
 
-const ADMIN_GROUP = 'Admin-command allow-list';
+const ADMIN_GROUP = 'admin command allowlist';
 const { resolveType, findMember } = require('./scope');
 const { receiverBefore } = require('./util');
 

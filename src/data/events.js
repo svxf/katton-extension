@@ -4,6 +4,7 @@ const EVENTS = [
   ['player_death', 'a player died in the arena (game)'],
   ['player_respawn', 'a player respawned in the arena (game)'],
   ['player_interact', 'when a player interacting with something interactable like a chest'],
+  ['player_input', 'when a player presses a key like: "forward", "backward", "left", "right", "jump", "sneak", "sprint"'],
   ['player_leftclick', 'a left click interaction'],
   ['player_rightclick', 'a right click interaction'],
   ['block_break', 'a block was broken'],

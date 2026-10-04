@@ -2,7 +2,7 @@
   "name": "katton-lang",
   "displayName": "katton language support",
   "description": "syntax highlighting, autocomplete, hover docs and token export/import for Katton (.kat) scripts!!",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publisher": "birb",
   "engines": {
     "vscode": "^1.75.0"
