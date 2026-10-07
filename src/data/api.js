@@ -90,6 +90,10 @@ const API_TYPES = [
       ['setMovementSpeed(speed)', 'sets movement speed (vanilla default is 0.1, living entities only)'],
       ['setJumpStrength(strength)', 'sets jump strength (vanilla default is 0.42, living entities only)'],
       ['setItem(item)', 'sets the item shown by an item display entity (runtime error on anything else)'],
+      ['setBlock(material)', 'sets the block shown by a block display entity (runtime error on anything else)'],
+      ['setOffset(x,y,z)', 'sets the display entity\'s offset'],
+      ['setScale(x,y,z)', 'sets the display entity\'s scale'],
+      ['setRotation(yaw,pitch,roll)', 'sets the display entity\'s rotation'],
       ['setTeleportDuration(ticks)', 'smoothly interpolates position changes over this many ticks instead of snapping. display entities only, clamped between 0 and 59'],
       ['kill()', 'removes the entity immediately'],
     ],
@@ -145,6 +149,7 @@ const API_TYPES = [
       ['sneak', 'checks if the forward key is being pressed, where applicable'],
       ['sprint', 'checks if the forward key is being pressed, where applicable'],
       ['cancel()', 'cancels the underlying action, only where the event supports cancellation'],
+      ['cleardrops()', 'clears the drops of the entity when they die, only where the event supports clearing drops'],
     ],
   },
 
