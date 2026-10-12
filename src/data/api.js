@@ -37,6 +37,7 @@ const API_TYPES = [
       ['location', 'a location value: { x, y, z, yaw, pitch }'],
       ['health', "the player's current health"],
       ['game_mode', 'one of "survival", "creative", "adventure", "spectator"'],
+      ['vehicle', 'returns the vehicle of whatever the player is riding'],
       ['is_sneaking', 'true if the player is currently sneaking'],
       ['is_sprinting', 'true if the player is currently sprinting'],
       ['facing', 'direction the player is looking: 1=down 2=up 3=north 4=south 5=west 6=east. up/down only when looking mostly straight up or down, otherwise the cardinal direction they mostly face'],
@@ -44,6 +45,7 @@ const API_TYPES = [
       ['offhand_tool', 'same as tool, but their off hand'],
 
       // methods
+      ['setGamemode(gamemode)', 'changes a player\'s gamemode'],
       ['sendMessage(text)', 'sends a chat message, supports & color codes'],
       ['sendTitle(title, subtitle = "")', 'shows a title and subtitle, supports & color codes'],
       ['sendActionBar(text)', 'shows text on the actionbar, supports & color codes'],
@@ -61,6 +63,8 @@ const API_TYPES = [
       ['setJumpStrength(strength)', 'sets jump strength (vanilla default is 0.42)'],
       ['resetJumpStrength()', 'resets jump strength back to 0.42'],
       ['setInvulnerable(invulnerable = true)', 'true makes the player immune to all damage'],
+      ['mount(entity)', 'makes the player mount a entity'],
+      ['dismount()', 'makes the player stop riding whatever they are riding'],
     ],
   },
 
@@ -77,6 +81,7 @@ const API_TYPES = [
       ['health', 'current health (living entities only)'],
       ['max_health', 'maximum health (living entities only)'],
       ['tags', 'a list of scoreboard tag strings'],
+      ['vehicle', 'returns the vehicle of whatever the player is riding'],
       ['yaw', 'horizontal rotation (living entities only)'],
       ['pitch', 'vertical rotation (living entities only)'],
 
@@ -106,6 +111,8 @@ const API_TYPES = [
       ['setRotation(yaw, pitch, roll)', "sets the display entity's rotation in degrees"],
       ['setTeleportDuration(ticks)', 'smoothly interpolates position changes over ticks (0-59, display entities only)'],
       ['kill()', 'removes the entity immediately'],
+      ['mount(entity)', 'makes the entity mount a entity'],
+      ['dismount()', 'makes the entity stop riding whatever they are riding'],
     ],
   },
 
