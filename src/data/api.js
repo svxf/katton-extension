@@ -11,6 +11,7 @@ const API_TYPES = [
     group: 'engine',
     prefix: 'Katton.',
     members: [
+      ['world()', 'the world object'],
       ['players', 'a player selector object: see the wiki for all()/survival()/spectator()/creative()'],
       ['vars', 'the state storage object: see the wiki for get/set/increment/decrement'],
       ['log', 'the owner only logging object: see the wiki for info/warn/error'],
@@ -116,6 +117,7 @@ const API_TYPES = [
       ['players', 'a list of player values in the game'],
       ['entities', 'a list of entity values in the world (players are NOT included, use world.players for those)'],
       ['spawnEntity(type, location)', 'spawns an entity (case insensitive type name) and returns it as an entity value. capped at 500 entities in the world at once, past that is a runtime error', 'spawnEntity("${1:zombie}", ${2:location})'],
+      ['spawnParticle(particle, location, count = 1, offset = {"x": 0, "y": 0, "z": 0}, speed = 0, direction = null, color = null, to_color = null, size = 1.0, material = null)', 'spawns vanilla particles at a location, visible to all players', 'spawnParticle("${1:flame}", ${2:location})'],
       ['setBlock(location, material)', 'sets the block at a location. material is a case insensitive vanilla block material name (non-block materials are a runtime error)', 'setBlock(${1:location}, "${2:stone}")'],
       ['getBlock(location)', 'returns the block material name at a location, e.g. "glass"'],
       ['fillBlocks(from, to, material)', 'fills every block in the box between from and to. capped at 4096 blocks per call, going over is a runtime error, so split big fills into chunks', 'fillBlocks(${1:from}, ${2:to}, "${3:stone}")'],
@@ -229,6 +231,7 @@ const MEMBER_RESULT_TYPES = {
   'world.spawnEntity': 'entity',
   'item.clone': 'item',
   'Katton.item': 'item',
+  'Katton.world': 'world',
   'Katton.players.all': 'player[]',
   'Katton.players.survival': 'player[]',
   'Katton.players.spectator': 'player[]',

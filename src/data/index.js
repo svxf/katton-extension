@@ -6,7 +6,7 @@ const {
 } = require('./events');
 
 const STRING_PARAMS = new Set([
-  'text', 'title', 'subtitle', 'sound', 'type', 'material', 'tag', 'key', 'name', 'message', 'command',
+  'text', 'title', 'subtitle', 'sound', 'type', 'material', 'tag', 'key', 'name', 'message', 'command', 'particle',
 ]);
 
 const memberName = signature => signature.split('(')[0].trim();
