@@ -15,6 +15,138 @@ async function fileExists(uri) {
   }
 }
 
+function chunkString(str, length) {
+  const chunks = [];
+  for (let i = 0; i < str.length; i += length) {
+    chunks.push(str.substring(i, i + length));
+  }
+  return chunks;
+}
+
+function showTokenChunksWebview(name, chunks) {
+  const panel = vscode.window.createWebviewPanel(
+    'kattonTokenChunks',
+    `Katton tokens - ${name}`,
+    vscode.ViewColumn.One,
+    { enableScripts: true }
+  );
+
+  panel.webview.onDidReceiveMessage(async (message) => {
+    if (message.command === 'copy') {
+      await vscode.env.clipboard.writeText(message.text);
+      vscode.window.showInformationMessage(`copied chunk ${message.index + 1} to clipboard!`);
+    }
+  });
+
+  const chunksHtml = chunks
+    .map((chunk, index) => {
+      const safeChunk = chunk
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+
+      return `
+        <div class="chunk-card">
+          <div class="chunk-header">
+            <h3>chunk ${index + 1} of ${chunks.length} <span class="char-count">(${chunk.length} chars)</span></h3>
+            <button onclick="copyChunk(${index})">copy chunk ${index + 1}</button>
+          </div>
+          <textarea readonly id="chunk-${index}">${safeChunk}</textarea>
+        </div>
+      `;
+    })
+    .join('');
+
+  panel.webview.html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: var(--vscode-font-family, sans-serif);
+      padding: 20px;
+      color: var(--vscode-foreground);
+      background-color: var(--vscode-editor-background);
+    }
+    h1 {
+      font-size: 1.4em;
+      margin-bottom: 8px;
+    }
+    p {
+      color: var(--vscode-descriptionForeground);
+      margin-bottom: 20px;
+    }
+    .chunk-card {
+      background: var(--vscode-editorWidget-background);
+      border: 1px solid var(--vscode-widget-border, #444);
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .chunk-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .chunk-header h3 {
+      margin: 0;
+      font-size: 1.1em;
+    }
+    .char-count {
+      font-weight: normal;
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+    button {
+      background-color: var(--vscode-button-background);
+      color: var(--vscode-button-foreground);
+      border: none;
+      padding: 6px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: var(--vscode-button-hoverBackground);
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      box-sizing: border-box;
+      background: var(--vscode-input-background);
+      color: var(--vscode-input-foreground);
+      border: 1px solid var(--vscode-input-border, #555);
+      border-radius: 4px;
+      padding: 8px;
+      font-family: monospace;
+      resize: vertical;
+    }
+  </style>
+</head>
+<body>
+  <h1>katton import token - ${name}</h1>
+  <p>the exported token exceeds 15,000 characters and was split into <strong>${chunks.length} chunks</strong>. copy each chunk individually to import ingame!</p>
+  
+  ${chunksHtml}
+
+  <script>
+    const vscode = acquireVsCodeApi();
+    const chunksData = ${JSON.stringify(chunks)};
+
+    function copyChunk(index) {
+      vscode.postMessage({
+        command: 'copy',
+        index: index,
+        text: chunksData[index]
+      });
+    }
+  </script>
+</body>
+</html>`;
+}
+
 async function exportToken() {
   const editor = vscode.window.activeTextEditor;
   if (!editor || editor.document.languageId !== 'katton') {
@@ -26,14 +158,26 @@ async function exportToken() {
   const name = sanitizeName(path.basename(fileName, path.extname(fileName)), 'script');
   const token = encodeToken(name, editor.document.getText());
 
-  await vscode.env.clipboard.writeText(token);
-  const choice = await vscode.window.showInformationMessage(
-    `import token for "${name}" copied to clipboard. run /katton import ingame and paste it`,
-    'show token',
-  );
-  if (choice === 'show token') {
-    const tokenDoc = await vscode.workspace.openTextDocument({ content: token, language: 'plaintext' });
-    await vscode.window.showTextDocument(tokenDoc, { preview: false });
+  const MAX_CHUNK_SIZE = 15000;
+
+  if (token.length > MAX_CHUNK_SIZE) {
+    const chunks = chunkString(token, MAX_CHUNK_SIZE);
+
+    showTokenChunksWebview(name, chunks);
+
+    vscode.window.showWarningMessage(
+      `token for "${name}" is too large (${token.length} chars). split into ${chunks.length} chunks. opened viewer page!`
+    );
+  } else {
+    await vscode.env.clipboard.writeText(token);
+    const choice = await vscode.window.showInformationMessage(
+      `import token for "${name}" copied to clipboard. run /katton import ingame and paste it`,
+      'show token'
+    );
+    if (choice === 'show token') {
+      const tokenDoc = await vscode.workspace.openTextDocument({ content: token, language: 'plaintext' });
+      await vscode.window.showTextDocument(tokenDoc, { preview: false });
+    }
   }
 }
 
