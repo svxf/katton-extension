@@ -10,6 +10,36 @@ function describeMember(type, label) {
   return member ? member.description : '';
 }
 
+function formatMemberDocumentation(member) {
+  if (!member) return '';
+  const sections = [];
+  if (member.description) sections.push(member.description);
+
+  if (Array.isArray(member.parameters) && member.parameters.length) {
+    const lines = member.parameters.map(parameter => {
+      if (typeof parameter === 'string') return `- \`${parameter}\``;
+      const name = parameter.name || 'parameter';
+      const type = parameter.type ? ` (${parameter.type})` : '';
+      const optional = parameter.optional ? ': optional' : '';
+      const description = parameter.description ? `: ${parameter.description}` : '';
+      const fallback = parameter.default !== undefined ? `; default: \`${parameter.default}\`` : '';
+      return `- \`${name}\`${type}${optional}${description}${fallback}`;
+    });
+    sections.push(`**parameters**\n${lines.join('\n')}`);
+  }
+
+  if (member.note) {
+    const notes = Array.isArray(member.note) ? member.note.join('\n') : member.note;
+    sections.push(`**note**\n${notes}`);
+  }
+
+  if (member.example) {
+    sections.push(`**example**\n\`\`\`katton\n${member.example}\n\`\`\``);
+  }
+
+  return sections.join('\n\n');
+}
+
 function describeValue(value) {
   return VALUE_DOCS[value.trim()] || '';
 }
@@ -151,4 +181,4 @@ function resolveType(text, offset, expression) {
   return typeOfExpression(expression, buildScope(text, offset));
 }
 
-module.exports = { resolveType, findMember, describeMember, describeValue };
+module.exports = { resolveType, findMember, describeMember, formatMemberDocumentation, describeValue };

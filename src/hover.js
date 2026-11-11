@@ -2,7 +2,7 @@ const vscode = require('vscode');
 const { ENTRIES } = require('./data');
 
 const ADMIN_GROUP = 'admin command allowlist';
-const { resolveType, findMember } = require('./scope');
+const { resolveType, findMember, formatMemberDocumentation } = require('./scope');
 const { receiverBefore } = require('./util');
 
 class KattonHoverProvider {
@@ -18,7 +18,7 @@ class KattonHoverProvider {
 
     const markdown = new vscode.MarkdownString();
     markdown.appendCodeblock(found.signature, 'katton');
-    markdown.appendMarkdown(found.description || '_(no description)_');
+    markdown.appendMarkdown(found.documentation || found.description || '_(no description)_');
     return new vscode.Hover(markdown, range);
   }
 }
@@ -33,7 +33,10 @@ function memberOnReceiver(document, range, word) {
 
   const type = resolveType(document.getText(), document.offsetAt(range.start), receiver);
   const member = type && findMember(type, word);
-  return member && { signature: member.prefix + member.signature, description: member.description };
+  return member && {
+    signature: member.prefix + member.signature,
+    documentation: formatMemberDocumentation(member),
+  };
 }
 
 const isInsideString = linePrefix => (linePrefix.match(/"/g) || []).length % 2 === 1;

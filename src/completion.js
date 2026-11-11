@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const { ENTRIES, MEMBER_CONTEXTS, STRING_CONTEXTS, DURATION_UNITS, snippetFor } = require('./data');
-const { resolveType, describeMember, describeValue } = require('./scope');
+const { resolveType, describeMember, formatMemberDocumentation, describeValue } = require('./scope');
 const { receiverBefore } = require('./util');
 
 const MAX_SNIPPET_RESULTS = 30;
@@ -90,11 +90,11 @@ function memberCompletions({ document, position, linePrefix }) {
     .map(member => {
       const kind = member.isMethod ? vscode.CompletionItemKind.Method : vscode.CompletionItemKind.Property;
       const item = new vscode.CompletionItem(member.label, kind);
-      const doc = describeMember(type, member.label);
+      const doc = formatMemberDocumentation(member.metadata) || describeMember(type, member.label);
 
       item.range = range;
       item.insertText = member.insert.includes('$') ? new vscode.SnippetString(member.insert) : member.insert;
-      item.detail = doc || `${type} member`;
+      item.detail = `${type} member`;
       item.documentation = MarkdownCode(
         `${receiver}.${member.label}`,
         (doc ? '\n\n' + doc : '') + inferredNote,

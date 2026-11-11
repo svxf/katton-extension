@@ -12,11 +12,38 @@ const STRING_PARAMS = new Set([
 const memberName = signature => signature.split('(')[0].trim();
 const isMethod = signature => signature.includes('(');
 
+function splitTopLevel(value, delimiter) {
+  const parts = [];
+  let start = 0;
+  let depth = 0;
+  let quote = null;
+  let escaped = false;
+
+  for (let i = 0; i < value.length; i++) {
+    const char = value[i];
+    if (escaped) { escaped = false; continue; }
+    if (char === '\\') { escaped = true; continue; }
+    if (quote) {
+      if (char === quote) quote = null;
+      continue;
+    }
+    if (char === '\"' || char === "'") { quote = char; continue; }
+    if (char === '(' || char === '[' || char === '{') depth++;
+    else if (char === ')' || char === ']' || char === '}') depth--;
+    else if (char === delimiter && depth === 0) {
+      parts.push(value.slice(start, i));
+      start = i + 1;
+    }
+  }
+  parts.push(value.slice(start));
+  return parts;
+}
+
 function parseParams(signature) {
   const inner = (signature.match(/\(([^)]*)\)/) || [, ''])[1].trim();
   if (!inner) return [];
-  return inner.split(',').map(raw => {
-    const [name, fallback] = raw.split('=').map(part => part.trim());
+  return splitTopLevel(inner, ',').map(raw => {
+    const [name, fallback] = splitTopLevel(raw, '=').map(part => part.trim());
     return { name, optional: fallback !== undefined };
   });
 }
@@ -64,11 +91,12 @@ addValues('events', EVENTS);
 addValues('command permission values', PERMISSIONS);
 
 for (const { type, group, prefix, wikiOnly, members } of API_TYPES) {
-  MEMBER_CONTEXTS[type] = members.map(([signature, description, snippet]) => {
+  MEMBER_CONTEXTS[type] = members.map(([signature, description, snippet, metadata]) => {
     const insert = snippet || defaultSnippet(signature);
-    MEMBER_INDEX[`${type}.${memberName(signature)}`] = { signature, description, prefix };
+    const details = { ...(metadata || {}), signature, description, prefix };
+    MEMBER_INDEX[`${type}.${memberName(signature)}`] = details;
     if (group) addEntry(group, prefix + signature, description, wikiOnly ? undefined : prefix + insert, wikiOnly);
-    return { label: signature, insert, description, isMethod: isMethod(signature) };
+    return { label: signature, insert, description, metadata: details, isMethod: isMethod(signature) };
   });
 }
 

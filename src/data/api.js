@@ -1,3 +1,26 @@
+const GENERATED_API = require('./api-data.json');
+
+function generateApiTypes() {
+  return Object.entries(GENERATED_API).map(([type, data]) => {
+    const members = [
+      ...data.properties,
+      ...data.methods,
+    ].map(member => [
+      member.signature,
+      member.description,
+      undefined,
+      member,
+    ]);
+
+    return {
+      type,
+      group: `${type} object`,
+      prefix: `${type}.`,
+      members,
+    };
+  });
+}
+
 const STATE_MEMBERS = [
   ['get(name)', 'reads a stored variable, or null if unset'],
   ['set(name, value)', 'stores a variable (string, number, boolean, list, or map)'],
@@ -5,7 +28,7 @@ const STATE_MEMBERS = [
   ['decrement(name, by = 1)', 'decrements a variable and returns the new value'],
 ];
 
-const API_TYPES = [
+const MANUAL_API_TYPES = [
   {
     type: 'Katton',
     group: 'engine',
@@ -242,6 +265,13 @@ const API_TYPES = [
       ['randomDecimal(minimum, maximum)', 'a random decimal number in the given range'],
     ],
   },
+];
+
+const API_TYPES = [
+  ...MANUAL_API_TYPES.filter(
+    ({ type }) => !Object.hasOwn(GENERATED_API, type)
+  ),
+  ...generateApiTypes(),
 ];
 
 const MEMBER_RESULT_TYPES = {

@@ -1,0 +1,1518 @@
+{
+    "block": {
+        "description": "you get a `block` value from events like `PlayerInteract`, `BlockBreak`, `BlockPlace`, `ProjectileHit`, and `BlockExplode`",
+        "properties": [
+            {
+                "name": "type",
+                "description": "block type",
+                "signature": "block.type",
+                "note": "",
+                "example": "block.type // \"stone\""
+            },
+            {
+                "name": "location",
+                "description": "block location object",
+                "signature": "block.location",
+                "note": "",
+                "example": "block.location // { x: 12.5, y: 64.0, z: -3.0 }"
+            },
+            {
+                "name": "world",
+                "description": "block world",
+                "signature": "block.world",
+                "note": "",
+                "example": "block.world // \"customarena\""
+            },
+            {
+                "name": "x",
+                "description": "the x-coordinate of this block",
+                "signature": "block.x",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "y",
+                "description": "the y-coordinate of this block",
+                "signature": "block.y",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "z",
+                "description": "the z-coordinate of this block",
+                "signature": "block.z",
+                "note": "",
+                "example": ""
+            }
+        ],
+        "methods": [
+            {
+                "name": "setType",
+                "description": "sets the block to a target material",
+                "signature": "block.setType(material)",
+                "note": "",
+                "example": "block.setType(\"glass\") // sets the block to glass",
+                "parameters": [
+                    {
+                        "name": "material",
+                        "default": "required",
+                        "description": "case insensitive vanilla block material name string"
+                    }
+                ]
+            }
+        ]
+    },
+    "entity": {
+        "description": "you get an `entity` value from `Katton.world().entities`, or as the return value of `Katton.world().spawnEntity(...)`. players are **not** included here, they're exposed separately via `player` values (see [player](https://www.google.com/search?q=player.md)) and `Katton.world().players`",
+        "properties": [
+            {
+                "name": "uuid",
+                "description": "\"8667ba71-b85a-4004-af54-457a9734eed7\" as a string",
+                "signature": "entity.uuid",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "type",
+                "description": "\"zombie\"",
+                "signature": "entity.type",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "is_valid",
+                "description": "true / false. an entity can stop existing at any point, whether it dies, despawns, etc. once that happens, every method below (other than the properties) throws a runtime error so check first if the `entity` value still exists",
+                "signature": "entity.is_valid",
+                "note": "",
+                "example": "val zombie = Katton.world().spawnEntity(\"zombie\", player.location)\nKatton.after(5.seconds) {\n    if (zombie.is_valid) {\n        zombie.setGlowing(true)\n    }\n}"
+            },
+            {
+                "name": "location",
+                "description": "{ x: 12.5, y: 64.0, z: -3.0, yaw: 90.0, pitch: 0.0 }",
+                "signature": "entity.location",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "health",
+                "description": "20.0, living entities only",
+                "signature": "entity.health",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "max_health",
+                "description": "20.0, living entities only",
+                "signature": "entity.max_health",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "tags",
+                "description": "a list of scoreboard tag strings",
+                "signature": "entity.tags",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "vehicle",
+                "description": "a `entity` value for whatever they are riding",
+                "signature": "entity.vehicle",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "yaw",
+                "description": "living entities only",
+                "signature": "entity.yaw",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "pitch",
+                "description": "living entities only",
+                "signature": "entity.pitch",
+                "note": "",
+                "example": ""
+            }
+        ],
+        "methods": [
+            {
+                "name": "setHealth",
+                "description": "sets the entity's current health",
+                "signature": "entity.setHealth(health)",
+                "note": "living entities only. value is clamped between `0` and the entity's `max_health`",
+                "example": "val zombie = Katton.world().spawnEntity(\"zombie\", player.location)\nzombie.setHealth(5)",
+                "parameters": [
+                    {
+                        "name": "health",
+                        "default": "default=20.0",
+                        "description": "target health value"
+                    }
+                ]
+            },
+            {
+                "name": "setDisplayName",
+                "description": "sets the custom name tag displayed above the entity",
+                "signature": "entity.setDisplayName(text)",
+                "note": "passing `\"\"` hides the name tag",
+                "example": "zombie.setDisplayName(\"&c&lBOSS ZOMBIE\")",
+                "parameters": [
+                    {
+                        "name": "text",
+                        "default": "default=\"\"",
+                        "description": "custom display text, supports `&` color codes"
+                    }
+                ]
+            },
+            {
+                "name": "setSkin",
+                "description": "sets the entity's skin if the entity is a mannequin",
+                "signature": "display.setSkin(username)",
+                "note": "only works on mannequins",
+                "example": "mannequin.setSkin(\"yayAmelia\")",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "default": "required",
+                        "description": "changes the skin of a mannequin to this username"
+                    }
+                ]
+            },
+            {
+                "name": "teleport",
+                "description": "teleports the entity to a target location object",
+                "signature": "entity.teleport(location)",
+                "note": "",
+                "example": "zombie.teleport({ \"x\": 0, \"y\": 70, \"z\": 0, \"yaw\": 0, \"pitch\": 0 })",
+                "parameters": [
+                    {
+                        "name": "location",
+                        "default": "required",
+                        "description": "location object `{ x, y, z, yaw, pitch }`"
+                    }
+                ]
+            },
+            {
+                "name": "setGlowing",
+                "description": "enables or disables the vanilla outline glowing effect around the entity",
+                "signature": "entity.setGlowing(glowing = true)",
+                "note": "",
+                "example": "zombie.setGlowing(true)\nzombie.setGlowing(false)",
+                "parameters": [
+                    {
+                        "name": "glowing",
+                        "default": "default=true",
+                        "description": "whether the glowing effect should be active"
+                    }
+                ]
+            },
+            {
+                "name": "addTag",
+                "description": "adds a scoreboard tag to the entity",
+                "signature": "entity.addTag(tag)",
+                "note": "scoreboard tags are handy for marking specific entities your script spawned so you can tell them apart from everything else in the world later",
+                "example": "val zombie = Katton.world().spawnEntity(\"zombie\", player.location)\nzombie.addTag(\"boss_fight_mob\")\nfor (e in Katton.world().entities) {\n    if (e.hasTag(\"boss_fight_mob\")) {\n        e.setGlowing(true)\n    }\n}",
+                "parameters": [
+                    {
+                        "name": "tag",
+                        "default": "default=\"\"",
+                        "description": "scoreboard tag string"
+                    }
+                ]
+            },
+            {
+                "name": "removeTag",
+                "description": "removes a scoreboard tag from the entity",
+                "signature": "entity.removeTag(tag)",
+                "note": "`removeTag` does nothing if the tag was never there",
+                "example": "",
+                "parameters": [
+                    {
+                        "name": "tag",
+                        "default": "default=\"\"",
+                        "description": "scoreboard tag string"
+                    }
+                ]
+            },
+            {
+                "name": "hasTag",
+                "description": "checks if the entity has a scoreboard tag",
+                "signature": "entity.hasTag(tag)",
+                "note": "",
+                "example": "",
+                "parameters": [
+                    {
+                        "name": "tag",
+                        "default": "default=\"\"",
+                        "description": "scoreboard tag string"
+                    }
+                ]
+            },
+            {
+                "name": "setMovementSpeed",
+                "description": "modifies movement speed attribute base values",
+                "signature": "entity.setMovementSpeed(speed)",
+                "note": "living entities only",
+                "example": "zombie.setMovementSpeed(0.3)",
+                "parameters": [
+                    {
+                        "name": "speed",
+                        "default": "default=0.1",
+                        "description": "movement speed attribute base value (vanilla default is `0.1`)"
+                    }
+                ]
+            },
+            {
+                "name": "resetMovementSpeed",
+                "description": "resets movement speed attribute base values to default",
+                "signature": "entity.resetMovementSpeed()",
+                "note": "living entities only",
+                "example": ""
+            },
+            {
+                "name": "setJumpStrength",
+                "description": "modifies jump height attribute base values",
+                "signature": "entity.setJumpStrength(strength)",
+                "note": "living entities only",
+                "example": "zombie.setJumpStrength(0.6)",
+                "parameters": [
+                    {
+                        "name": "strength",
+                        "default": "default=0.42",
+                        "description": "jump strength attribute base value (vanilla default is `0.42`)"
+                    }
+                ]
+            },
+            {
+                "name": "resetJumpStrength",
+                "description": "resets jump height attribute base values to default",
+                "signature": "entity.resetJumpStrength()",
+                "note": "living entities only",
+                "example": ""
+            },
+            {
+                "name": "setScale",
+                "description": "resizes the display entity along each coordinate axis or modifies the living entity's scale attribute",
+                "signature": "display.setScale(x, y, z) or entity.setScale(scale)",
+                "note": "only works on display entities for 3 axis scale, or living entities for attribute scale",
+                "example": "val display = Katton.world().spawnEntity(\"block_display\", player.location)\ndisplay.setBlock(\"stone\")\ndisplay.setScale(1, 3, 1)",
+                "parameters": [
+                    {
+                        "name": "scale",
+                        "default": "default=1.0",
+                        "description": "scale value multiplier"
+                    },
+                    {
+                        "name": "x",
+                        "default": "default=1",
+                        "description": "horizontal scale factor (width)"
+                    },
+                    {
+                        "name": "y",
+                        "default": "default=1",
+                        "description": "vertical scale factor (height)"
+                    },
+                    {
+                        "name": "z",
+                        "default": "default=1",
+                        "description": "depth scale factor (length)"
+                    }
+                ]
+            },
+            {
+                "name": "resetScale",
+                "description": "resets the scale configuration back to default",
+                "signature": "entity.resetScale()",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "setText",
+                "description": "sets the text content displayed by a text display entity",
+                "signature": "display.setText(text)",
+                "note": "only works on text display entities (`text_display`)",
+                "example": "val display = Katton.world().spawnEntity(\"text_display\", player.location)\ndisplay.setText(\"hello world\")",
+                "parameters": [
+                    {
+                        "name": "text",
+                        "default": "default=\"\"",
+                        "description": "text content string, automatically filtered and styled"
+                    }
+                ]
+            },
+            {
+                "name": "setBackgroundColor",
+                "description": "changes the background color of a text display entity",
+                "signature": "display.setBackgroundColor(r, g, b, a)",
+                "note": "only works on text display entities (`text_display`)",
+                "example": "display.setBackgroundColor(255, 0, 0, 128)",
+                "parameters": [
+                    {
+                        "name": "r",
+                        "default": "default=0",
+                        "description": "red color channel (0 to 255)"
+                    },
+                    {
+                        "name": "g",
+                        "default": "default=0",
+                        "description": "green color channel (0 to 255)"
+                    },
+                    {
+                        "name": "b",
+                        "default": "default=0",
+                        "description": "blue color channel (0 to 255)"
+                    },
+                    {
+                        "name": "a",
+                        "default": "default=255",
+                        "description": "alpha transparency channel (0 to 255)"
+                    }
+                ]
+            },
+            {
+                "name": "resetBackground",
+                "description": "resets the background color of a text display entity",
+                "signature": "display.resetBackground()",
+                "note": "only works on text display entities (`text_display`)",
+                "example": "display.resetBackground()"
+            },
+            {
+                "name": "setDefaultBackground",
+                "description": "configures whether the default background is enabled for a text display entity",
+                "signature": "display.setDefaultBackground(enabled)",
+                "note": "only works on text display entities (`text_display`)",
+                "example": "display.setDefaultBackground(false)",
+                "parameters": [
+                    {
+                        "name": "enabled",
+                        "default": "default=true",
+                        "description": "whether the default background is enabled"
+                    }
+                ]
+            },
+            {
+                "name": "setTextOpacity",
+                "description": "sets the opacity of the text on a text display entity",
+                "signature": "display.setTextOpacity(opacity)",
+                "note": "only works on text display entities (`text_display`)",
+                "example": "display.setTextOpacity(128)",
+                "parameters": [
+                    {
+                        "name": "opacity",
+                        "default": "default=255",
+                        "description": "text opacity value (0 to 255)"
+                    }
+                ]
+            },
+            {
+                "name": "setAlignment",
+                "description": "sets the text alignment on a text display entity",
+                "signature": "display.setAlignment(alignment)",
+                "note": "only works on text display entities (`text_display`)",
+                "example": "display.setAlignment(\"left\")",
+                "parameters": [
+                    {
+                        "name": "alignment",
+                        "default": "default=\"center\"",
+                        "description": "alignment string, must be one of: left, center, right"
+                    }
+                ]
+            },
+            {
+                "name": "setLineWidth",
+                "description": "sets the maximum line width for wrapping text on a text display entity",
+                "signature": "display.setLineWidth(width)",
+                "note": "only works on text display entities (`text_display`)",
+                "example": "display.setLineWidth(300)",
+                "parameters": [
+                    {
+                        "name": "width",
+                        "default": "default=200",
+                        "description": "maximum width (clamped between 1 and 1000)"
+                    }
+                ]
+            },
+            {
+                "name": "setSeeThrough",
+                "description": "enables or disables whether the text display is visible through blocks",
+                "signature": "display.setSeeThrough(seeThrough)",
+                "note": "only works on text display entities (`text_display`)",
+                "example": "display.setSeeThrough(true)",
+                "parameters": [
+                    {
+                        "name": "seeThrough",
+                        "default": "default=true",
+                        "description": "whether text renders through obstacles"
+                    }
+                ]
+            },
+            {
+                "name": "setShadowed",
+                "description": "enables or disables the text shadow effect on a text display entity",
+                "signature": "display.setShadowed(shadowed)",
+                "note": "only works on text display entities (`text_display`)",
+                "example": "display.setShadowed(true)",
+                "parameters": [
+                    {
+                        "name": "shadowed",
+                        "default": "default=true",
+                        "description": "whether text has a shadow"
+                    }
+                ]
+            },
+            {
+                "name": "setBillboard",
+                "description": "sets the billboard setting of the text display entity",
+                "signature": "display.setBillboard(billboard)",
+                "note": "only works on text display entities (`text_display`)",
+                "example": "display.setBillboard(\"fixed\")",
+                "parameters": [
+                    {
+                        "name": "billboard",
+                        "default": "default=center",
+                        "description": "the billboard setting"
+                    }
+                ]
+            },
+            {
+                "name": "setItem",
+                "description": "sets the item stack displayed by an item display entity",
+                "signature": "display.setItem(item)",
+                "note": "only works on item display entities (`item_display`). see item for making items",
+                "example": "val display = Katton.world().spawnEntity(\"item_display\", player.location)\ndisplay.setItem(Katton.item(\"diamond_sword\"))",
+                "parameters": [
+                    {
+                        "name": "item",
+                        "default": "required",
+                        "description": "a `Katton.item(...)` value"
+                    }
+                ]
+            },
+            {
+                "name": "setBlock",
+                "description": "sets the block material displayed by a block display entity",
+                "signature": "display.setBlock(material)",
+                "note": "only works on block display entities (`block_display`)",
+                "example": "val display = Katton.world().spawnEntity(\"block_display\", player.location)\ndisplay.setBlock(\"stone\")",
+                "parameters": [
+                    {
+                        "name": "material",
+                        "default": "required",
+                        "description": "block material name string (e.g. `\"stone\"`)"
+                    }
+                ]
+            },
+            {
+                "name": "setOffset",
+                "description": "shifts the display entity relative to the entity's actual pivot point without moving the entity itself",
+                "signature": "display.setOffset(x, y, z)",
+                "note": "only works on display entities (`item_display`, `block_display`, `text_display`)",
+                "example": "val display = Katton.world().spawnEntity(\"block_display\", player.location)\ndisplay.setBlock(\"stone\")\ndisplay.setOffset(0, 2, 0)",
+                "parameters": [
+                    {
+                        "name": "x",
+                        "default": "default=0",
+                        "description": "horizontal translation offset (left / right)"
+                    },
+                    {
+                        "name": "y",
+                        "default": "default=0",
+                        "description": "vertical translation offset (up / down)"
+                    },
+                    {
+                        "name": "z",
+                        "default": "default=0",
+                        "description": "forward / backward translation offset"
+                    }
+                ]
+            },
+            {
+                "name": "setRotation",
+                "description": "rotates the display model using degrees",
+                "signature": "display.setRotation(yaw, pitch, roll)",
+                "note": "only works on display entities (`item_display`, `block_display`, `text_display`)",
+                "example": "val display = Katton.world().spawnEntity(\"item_display\", player.location)\ndisplay.setItem(Katton.item(\"diamond_sword\"))\ndisplay.setRotation(0, 45, 90)",
+                "parameters": [
+                    {
+                        "name": "yaw",
+                        "default": "default=0",
+                        "description": "horizontal rotation around the vertical Y axis (left / right)"
+                    },
+                    {
+                        "name": "pitch",
+                        "default": "default=0",
+                        "description": "vertical tilt around the X axis (up / down)"
+                    },
+                    {
+                        "name": "roll",
+                        "default": "default=0",
+                        "description": "sideways tilt around the Z axis"
+                    }
+                ]
+            },
+            {
+                "name": "setTeleportDuration",
+                "description": "sets the teleport tick duration for position changes to transition smoothly instead of snapping immediately",
+                "signature": "display.setTeleportDuration(ticks)",
+                "note": "only works on display entities (`item_display`, `block_display`, `text_display`)",
+                "example": "display.setTeleportDuration(20)",
+                "parameters": [
+                    {
+                        "name": "ticks",
+                        "default": "default=0",
+                        "description": "transition duration in ticks (clamped between `0` and `59`)"
+                    }
+                ]
+            },
+            {
+                "name": "setInterpolationDuration",
+                "description": "sets the interpolation duration",
+                "signature": "display.setInterpolationDuration(ticks)",
+                "note": "only works on display entities (`item_display`, `block_display`, `text_display`)",
+                "example": "",
+                "parameters": [
+                    {
+                        "name": "ticks",
+                        "default": "default=0",
+                        "description": "interpolation duration in ticks"
+                    }
+                ]
+            },
+            {
+                "name": "setInterpolationDelay",
+                "description": "sets the interpolation delay",
+                "signature": "display.setInterpolationDelay(ticks)",
+                "note": "only works on display entities (`item_display`, `block_display`, `text_display`)",
+                "example": "",
+                "parameters": [
+                    {
+                        "name": "ticks",
+                        "default": "default=0",
+                        "description": "interpolation delay in ticks"
+                    }
+                ]
+            },
+            {
+                "name": "giveEffect",
+                "description": "gives the entity a potion effect",
+                "signature": "entity.giveEffect(potion_effect)",
+                "note": "",
+                "example": "",
+                "parameters": [
+                    {
+                        "name": "effect",
+                        "default": "required",
+                        "description": "a potion effect value"
+                    }
+                ]
+            },
+            {
+                "name": "removeEffect",
+                "description": "removes a specific potion effect from the entity",
+                "signature": "entity.removeEffect(potion_effect)",
+                "note": "",
+                "example": "",
+                "parameters": [
+                    {
+                        "name": "effect",
+                        "default": "required",
+                        "description": "the potion effect to remove"
+                    }
+                ]
+            },
+            {
+                "name": "removeAllEffects",
+                "description": "removes all active potion effects from the entity",
+                "signature": "entity.removeAllEffects()",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "mount",
+                "description": "makes the entity mount an entity",
+                "signature": "thisEntity.mount(entity)",
+                "note": "",
+                "example": "",
+                "parameters": [
+                    {
+                        "name": "vehicle",
+                        "default": "required",
+                        "description": "the entity the entity rides"
+                    }
+                ]
+            },
+            {
+                "name": "dismount",
+                "description": "makes the entity stop riding whatever they are currently riding",
+                "signature": "thisEntity.dismount()",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "kill",
+                "description": "removes the entity immediately from the world",
+                "signature": "entity.kill()",
+                "note": "",
+                "example": "zombie.kill()"
+            }
+        ]
+    },
+    "item": {
+        "description": "you can make custom item stacks using `Katton.item(...)` and manipulate their display names, lore, custom tags, enchantments, or clone them",
+        "properties": [
+            {
+                "name": "setName",
+                "description": "sets the custom display name of the item stack",
+                "signature": "item.setName(text)",
+                "note": "",
+                "example": "val wand = Katton.item(\"stick\")\nwand.setName(\"&aLeap Wand\")",
+                "parameters": [
+                    {
+                        "name": "text",
+                        "default": "required",
+                        "description": "custom item display name, supports `&` color codes"
+                    }
+                ]
+            }
+        ],
+        "methods": [
+            {
+                "name": "setLore",
+                "description": "sets the lore description lines on the item stack",
+                "signature": "item.setLore(lines)",
+                "note": "",
+                "example": "wand.setLore([\"&7Right click to leap forward!\", \"&7Cooldown: none\"])",
+                "parameters": [
+                    {
+                        "name": "lines",
+                        "default": "required",
+                        "description": "a list of string lines, supports `&` color codes"
+                    }
+                ]
+            },
+            {
+                "name": "setTag",
+                "description": "applies custom data stored directly on the item's metadata",
+                "signature": "item.setTag(key, value)",
+                "note": "tag values are always stored and read back as strings",
+                "example": "val wand = Katton.item(\"stick\")\nwand.setName(\"&aLeap Wand\")\nwand.setTag(\"ability\", \"leap_wand\") // mark this specific item\nsender.give(wand)",
+                "parameters": [
+                    {
+                        "name": "key",
+                        "default": "required",
+                        "description": "custom tag key identifier string"
+                    },
+                    {
+                        "name": "value",
+                        "default": "required",
+                        "description": "string data value to attach"
+                    }
+                ]
+            },
+            {
+                "name": "getTag",
+                "description": "reads custom data stored directly on the item's metadata",
+                "signature": "item.getTag(key)",
+                "note": "`getTag` returns `null` if the tag was never set on that item",
+                "example": "@Katton.listen(\"player_rightclick\")\nfunction onLeap(event) {\n    val item = event.item\n    if (item != null && item.getTag(\"ability\") == \"leap_wand\") { // this is one of our wands, not a random item\n        event.player.launchForward(1.8, 0.65)\n    }\n}",
+                "parameters": [
+                    {
+                        "name": "key",
+                        "default": "required",
+                        "description": "custom tag key identifier string"
+                    }
+                ]
+            },
+            {
+                "name": "enchant",
+                "description": "applies a vanilla enchantment to the item stack",
+                "signature": "item.enchant(name, level)",
+                "note": "passing an unknown enchantment name throws a runtime error",
+                "example": "val sword = Katton.item(\"diamond_sword\")\nsword.enchant(\"sharpness\", 5)\nsword.enchant(\"unbreaking\", 3)",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "default": "required",
+                        "description": "enchantment string (e.g. `\"sharpness\"`, `\"unbreaking\"`)"
+                    },
+                    {
+                        "name": "level",
+                        "default": "required",
+                        "description": "enchantment level integer (clamped between `1` and `5`)"
+                    }
+                ]
+            },
+            {
+                "name": "clone",
+                "description": "creates a duplicate copy of the item stack with all its current properties and custom tags preserved",
+                "signature": "item.clone()",
+                "note": "",
+                "example": "val original = Katton.item(\"stick\")\noriginal.setName(\"&aOriginal\")\nval copy = original.clone()\ncopy.setName(\"&bCopy\")"
+            },
+            {
+                "name": "dye",
+                "description": "dyes a leather armor item",
+                "signature": "item.dye(r,g,b)",
+                "note": "",
+                "example": "val leather = Katton.item(\"leather_chestplate\")\nleather.dye(245, 73, 39)",
+                "parameters": [
+                    {
+                        "name": "r",
+                        "default": "required",
+                        "description": "red color component (0 to 255)"
+                    },
+                    {
+                        "name": "g",
+                        "default": "required",
+                        "description": "green color component (0 to 255)"
+                    },
+                    {
+                        "name": "b",
+                        "default": "required",
+                        "description": "blue color component (0 to 255)"
+                    }
+                ]
+            }
+        ]
+    },
+    "player": {
+        "description": "you get a `player` value from `Katton.players.*` selectors, the `sender` parameter in a command handler, or `event.player` in an event handler",
+        "properties": [
+            {
+                "name": "name",
+                "description": "player name",
+                "signature": "player.name",
+                "note": "",
+                "example": "player.name // \"Steve\""
+            },
+            {
+                "name": "uuid",
+                "description": "player uuid as a string",
+                "signature": "player.uuid",
+                "note": "",
+                "example": "player.uuid // \"8667ba71-b85a-4004-af54-457a9734eed7\" as a string"
+            },
+            {
+                "name": "type",
+                "description": "entity type name",
+                "signature": "player.type",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "world",
+                "description": "current world name",
+                "signature": "player.world",
+                "note": "",
+                "example": "player.world // \"customarena\""
+            },
+            {
+                "name": "location",
+                "description": "player location object",
+                "signature": "player.location",
+                "note": "",
+                "example": "player.location // { x: 12.5, y: 64.0, z: -3.0, yaw: 90.0, pitch: 0.0 }"
+            },
+            {
+                "name": "health",
+                "description": "player health",
+                "signature": "player.health",
+                "note": "",
+                "example": "player.health // 20.0"
+            },
+            {
+                "name": "game_mode",
+                "description": "player game mode",
+                "signature": "player.game_mode",
+                "note": "",
+                "example": "player.game_mode // \"survival\" | \"creative\" | \"adventure\" | \"spectator\""
+            },
+            {
+                "name": "velocity",
+                "description": "player velocity object",
+                "signature": "player.velocity",
+                "note": "",
+                "example": "player.velocity // { x: 0, y: 0, z: 0 }"
+            },
+            {
+                "name": "vehicle",
+                "description": "a `entity` value for whatever they are riding",
+                "signature": "player.vehicle",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "is_sneaking",
+                "description": "true / false",
+                "signature": "player.is_sneaking",
+                "note": "",
+                "example": "player.is_sneaking // true / false"
+            },
+            {
+                "name": "is_sprinting",
+                "description": "true / false",
+                "signature": "player.is_sprinting",
+                "note": "",
+                "example": "player.is_sprinting // true / false"
+            },
+            {
+                "name": "facing",
+                "description": "tells you which direction the player is looking, as a number: 1 (down), 2 (up), 3 (north), 4 (south), 5 (west), 6 (east)",
+                "signature": "player.facing",
+                "note": "up/down is only reported when the player is looking mostly straight up or down, otherwise you get whichever cardinal direction (N/S/E/W) they're mostly facing",
+                "example": "@Katton.listen(\"player_leftclick\")\nfunction onLeftClick(event) {\n    when (event.player.facing) {\n        2 -> { event.player.sendMessage(\"&7you're looking up\") }\n        1 -> { event.player.sendMessage(\"&7you're looking down\") }\n        else -> { event.player.sendMessage(\"&7you're looking sideways\") }\n    }\n}"
+            },
+            {
+                "name": "tool",
+                "description": "an `item` value for whatever's in their main hand (empty hand still gives you an item value, just air)",
+                "signature": "player.tool",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "offhand_tool",
+                "description": "same, but their off hand",
+                "signature": "player.offhand_tool",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "is_blocking",
+                "description": "whether the player is blocking",
+                "signature": "player.is_blocking",
+                "note": "",
+                "example": ""
+            }
+        ],
+        "methods": [
+            {
+                "name": "setArmor",
+                "description": "sets an item to the player's armor slot",
+                "signature": "player.setArmor(slot, item)",
+                "note": "the avialable armor slots are: head/helmet, chest/chestplate, legs/leggings, feet/boots",
+                "example": "val helmet = Katton.item(\"diamond_helmet\")\nplayer.setArmor(\"head\", helmet)",
+                "parameters": [
+                    {
+                        "name": "slot",
+                        "default": "required",
+                        "description": "a slot string"
+                    },
+                    {
+                        "name": "item",
+                        "default": "required",
+                        "description": "a `Katton.item(...)` value"
+                    }
+                ]
+            },
+            {
+                "name": "getArmor",
+                "description": "gets the item in the specified armor slot",
+                "signature": "player.getArmor(slot)",
+                "note": "",
+                "example": "val helmet = player.getArmor(\"head\")",
+                "parameters": [
+                    {
+                        "name": "slot",
+                        "default": "required",
+                        "description": "a slot string ('head', 'chestplate', 'leggings', or 'boots')"
+                    }
+                ]
+            },
+            {
+                "name": "countItem",
+                "description": "number of that material in inventory (incl. armor/offhand)",
+                "signature": "player.countItem(material)",
+                "note": "",
+                "example": "val count = player.countItem(\"diamond\")",
+                "parameters": [
+                    {
+                        "name": "material",
+                        "default": "required",
+                        "description": "material name string"
+                    }
+                ]
+            },
+            {
+                "name": "setGamemode",
+                "description": "changes a player gamemode",
+                "signature": "player.setGamemode(gamemode)",
+                "note": "survival/adventure sets them to survival if placing/breaking/building is on, if not it sets them to adventure",
+                "example": "player.setGamemode(\"creative\") // caps doesn't matter",
+                "parameters": [
+                    {
+                        "name": "gamemode",
+                        "default": "required",
+                        "description": "changes a player's gamemode to: survival/adventure, creative, spectator"
+                    }
+                ]
+            },
+            {
+                "name": "setHealth",
+                "description": "sets the player's current health",
+                "signature": "player.setHealth(health)",
+                "note": "",
+                "example": "player.setHealth(5)",
+                "parameters": [
+                    {
+                        "name": "health",
+                        "default": "default=20.0",
+                        "description": "target health value"
+                    }
+                ]
+            },
+            {
+                "name": "sendMessage",
+                "description": "sends a chat message to the player",
+                "signature": "player.sendMessage(text)",
+                "note": "",
+                "example": "player.sendMessage(\"&awelcome!\")",
+                "parameters": [
+                    {
+                        "name": "text",
+                        "default": "required",
+                        "description": "chat message text, supports `&` color codes"
+                    }
+                ]
+            },
+            {
+                "name": "sendTitle",
+                "description": "displays a optional title and optional subtitle on the player's screen",
+                "signature": "player.sendTitle(title, subtitle = \"\")",
+                "note": "",
+                "example": "player.sendTitle(\"&cRED\", \"\") // shows RED in red on the top line and nothing on the bottom\nplayer.sendTitle(\"&eGet Ready!\", \"&7Round starting...\") // shows Get Ready! in yellow on top and Round starting on bottom",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "default": "default=\"\"",
+                        "description": "top line title text, supports `&` color codes"
+                    },
+                    {
+                        "name": "subtitle",
+                        "default": "default=\"\"",
+                        "description": "bottom line subtitle text, supports `&` color codes"
+                    }
+                ]
+            },
+            {
+                "name": "setCompassTarget",
+                "description": "sets the target location for the player's compass",
+                "signature": "player.setCompassTarget(location)",
+                "note": "",
+                "example": "player.setCompassTarget({ \"x\": 100, \"y\": 64, \"z\": 200 })",
+                "parameters": [
+                    {
+                        "name": "location",
+                        "default": "required",
+                        "description": "location object `{ x, y, z, yaw, pitch }`"
+                    }
+                ]
+            },
+            {
+                "name": "sendActionBar",
+                "description": "displays text above the player's hotbar",
+                "signature": "player.sendActionBar(text)",
+                "note": "",
+                "example": "player.sendActionBar(\"&emoooooo\") // shows moooooo in yellow on the actionbar",
+                "parameters": [
+                    {
+                        "name": "text",
+                        "default": "required",
+                        "description": "action bar text, supports `&` color codes"
+                    }
+                ]
+            },
+            {
+                "name": "teleport",
+                "description": "teleports the player to a target location object",
+                "signature": "player.teleport(location)",
+                "note": "",
+                "example": "player.teleport({ \"x\": 100, \"y\": 50, \"z\": 150, \"yaw\": 0, \"pitch\": 0 })",
+                "parameters": [
+                    {
+                        "name": "location",
+                        "default": "required",
+                        "description": "location object `{ x, y, z, yaw, pitch }`"
+                    }
+                ]
+            },
+            {
+                "name": "give",
+                "description": "adds an item to the player's inventory",
+                "signature": "player.give(item)",
+                "note": "see item for making items",
+                "example": "val sword = Katton.item(\"diamond_sword\")\nplayer.give(sword)",
+                "parameters": [
+                    {
+                        "name": "item",
+                        "default": "required",
+                        "description": "a `Katton.item(...)` value"
+                    }
+                ]
+            },
+            {
+                "name": "setTool",
+                "description": "replaces whatever item is currently held in that hand slot",
+                "signature": "player.setTool(item)",
+                "note": "replaces whatever's currently in that hand, it doesn't add to the inventory like `give` does",
+                "example": "player.setTool(Katton.item(\"diamond_sword\"))",
+                "parameters": [
+                    {
+                        "name": "item",
+                        "default": "required",
+                        "description": "a `Katton.item(...)` value"
+                    }
+                ]
+            },
+            {
+                "name": "setOffhandTool",
+                "description": "replaces whatever item is currently held in that hand slot",
+                "signature": "player.setOffhandTool(item)",
+                "note": "replaces whatever's currently in that hand, it doesn't add to the inventory like `give` does",
+                "example": "player.setOffhandTool(Katton.item(\"shield\"))",
+                "parameters": [
+                    {
+                        "name": "item",
+                        "default": "required",
+                        "description": "a `Katton.item(...)` value"
+                    }
+                ]
+            },
+            {
+                "name": "playSound",
+                "description": "plays a sound effect directly to the player",
+                "signature": "player.playSound(sound, volume = 1.0, pitch = 1.0)",
+                "note": "you can find all valid sound names at: https://jd.papermc.io/paper/1.21.11/org/bukkit/Sound.html",
+                "example": "player.playSound(\"entity_experience_orb_pickup\")\nplayer.playSound(\"entity_experience_orb_pickup\", 0.5, 1.5)",
+                "parameters": [
+                    {
+                        "name": "sound",
+                        "default": "required",
+                        "description": "bukkit sound key string"
+                    },
+                    {
+                        "name": "volume",
+                        "default": "default=1.0",
+                        "description": "sound volume"
+                    },
+                    {
+                        "name": "pitch",
+                        "default": "default=1.0",
+                        "description": "sound pitch multiplier"
+                    }
+                ]
+            },
+            {
+                "name": "launchForward",
+                "description": "launches the player in the direction they are currently facing",
+                "signature": "player.launchForward(horizontal = 1.8, vertical = 0.65)",
+                "note": "maximum value for both horizontal and vertical speed is `6.0`",
+                "example": "player.launchForward(1.8, 0.65)",
+                "parameters": [
+                    {
+                        "name": "horizontal",
+                        "default": "default=1.8",
+                        "description": "forward speed force"
+                    },
+                    {
+                        "name": "vertical",
+                        "default": "default=0.65",
+                        "description": "upward speed force"
+                    }
+                ]
+            },
+            {
+                "name": "setVelocity",
+                "description": "sets the player's velocity",
+                "signature": "player.setVelocity(x, y, z)",
+                "note": "",
+                "example": "player.setVelocity(0.5, 2, 1)",
+                "parameters": [
+                    {
+                        "name": "x",
+                        "default": "default=1.0",
+                        "description": "x velocity"
+                    },
+                    {
+                        "name": "y",
+                        "default": "default=1.0",
+                        "description": "y velocity"
+                    },
+                    {
+                        "name": "z",
+                        "default": "default=1.0",
+                        "description": "z velocity"
+                    }
+                ]
+            },
+            {
+                "name": "giveEffect",
+                "description": "gives the player a potion effect",
+                "signature": "player.giveEffect(Katton.potionEffect(potion_effect, time, strength))",
+                "note": "",
+                "example": "player.giveEffect(Katton.potionEffect(\"speed\", 10.seconds, 2))",
+                "parameters": [
+                    {
+                        "name": "potion_effect",
+                        "default": "required",
+                        "description": "the potion effect to give"
+                    },
+                    {
+                        "name": "time",
+                        "default": "required",
+                        "description": "the amount of time it should last"
+                    },
+                    {
+                        "name": "strength",
+                        "default": "required",
+                        "description": "the strength of the effect"
+                    }
+                ]
+            },
+            {
+                "name": "removeEffect",
+                "description": "removes a specific potion effect from the player",
+                "signature": "player.removeEffect(potion_effect)",
+                "note": "",
+                "example": "player.removeEffect(\"speed\")\nplayer.removeEffect(Katton.potionEffect(\"speed\"))",
+                "parameters": [
+                    {
+                        "name": "potion_effect",
+                        "default": "required",
+                        "description": "the potion effect to remove"
+                    }
+                ]
+            },
+            {
+                "name": "removeAllEffects",
+                "description": "removes all active potion effects from a player",
+                "signature": "player.removeAllEffects()",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "clearInventory",
+                "description": "wipes the player's entire inventory",
+                "signature": "player.clearInventory()",
+                "note": "wipes everything, including equipped armor and offhand slots",
+                "example": "player.clearInventory()"
+            },
+            {
+                "name": "setGlowing",
+                "description": "enables or disables the vanilla outline glowing effect around the player",
+                "signature": "player.setGlowing(glowing = true)",
+                "note": "",
+                "example": "player.setGlowing(true)\nplayer.setGlowing(false)",
+                "parameters": [
+                    {
+                        "name": "glowing",
+                        "default": "default=true",
+                        "description": "whether the glowing effect should be active"
+                    }
+                ]
+            },
+            {
+                "name": "setMovementSpeed",
+                "description": "modifies or resets the player's walking movement speed attribute",
+                "signature": "player.setMovementSpeed(speed)",
+                "note": "",
+                "example": "player.setMovementSpeed(0.3) // vanilla default is 0.1",
+                "parameters": [
+                    {
+                        "name": "speed",
+                        "default": "default=0.1",
+                        "description": "movement speed attribute base value (vanilla default is `0.1`)"
+                    }
+                ]
+            },
+            {
+                "name": "resetMovementSpeed",
+                "description": "modifies or resets the player's walking movement speed attribute",
+                "signature": "player.resetMovementSpeed()",
+                "note": "",
+                "example": "player.resetMovementSpeed() // back to 0.1"
+            },
+            {
+                "name": "setJumpStrength",
+                "description": "modifies or resets the player's jump height attribute",
+                "signature": "player.setJumpStrength(strength)",
+                "note": "",
+                "example": "player.setJumpStrength(0.6) // vanilla default is 0.42",
+                "parameters": [
+                    {
+                        "name": "strength",
+                        "default": "default=0.42",
+                        "description": "jump strength attribute base value (vanilla default is `0.42`)"
+                    }
+                ]
+            },
+            {
+                "name": "resetJumpStrength",
+                "description": "modifies or resets the player's jump height attribute",
+                "signature": "player.resetJumpStrength()",
+                "note": "",
+                "example": "player.resetJumpStrength() // back to 0.42"
+            },
+            {
+                "name": "setScale",
+                "description": "modifies the player's scale attribute",
+                "signature": "player.setScale(scale)",
+                "note": "",
+                "example": "",
+                "parameters": [
+                    {
+                        "name": "scale",
+                        "default": "default=1.0",
+                        "description": "scale factor"
+                    }
+                ]
+            },
+            {
+                "name": "resetScale",
+                "description": "resets the player's scale attribute to 1.0",
+                "signature": "player.resetScale()",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "setInvulnerable",
+                "description": "toggles godmode damage immunity for the player",
+                "signature": "player.setInvulnerable(invulnerable = true)",
+                "note": "",
+                "example": "player.setInvulnerable(true) // immune to all damage\nplayer.setInvulnerable(false)",
+                "parameters": [
+                    {
+                        "name": "invulnerable",
+                        "default": "default=true",
+                        "description": "whether the player should be immune to all damage"
+                    }
+                ]
+            },
+            {
+                "name": "mount",
+                "description": "makes the player mount a entity",
+                "signature": "player.mount(entity)",
+                "note": "",
+                "example": "",
+                "parameters": [
+                    {
+                        "name": "entity",
+                        "default": "required",
+                        "description": "the entity the player rides"
+                    }
+                ]
+            },
+            {
+                "name": "dismount",
+                "description": "makes the player stop riding whatever they are currently riding",
+                "signature": "player.dismount()",
+                "note": "",
+                "example": "player.dismount()"
+            },
+            {
+                "name": "shootProjectile",
+                "description": "shoots a projectile from the player in the direction they are currently facing",
+                "signature": "player.shootProjectile(projectile = \"arrow\", speed = 2.0)",
+                "note": "maximum `speed` value is `6.0`",
+                "example": "player.shootProjectile(\"arrow\", 2.0)",
+                "parameters": [
+                    {
+                        "name": "projectile",
+                        "default": "default=\"arrow\"",
+                        "description": "type of projectile to launch"
+                    },
+                    {
+                        "name": "speed",
+                        "default": "default=2.0",
+                        "description": "velocity multiplier of the projectile"
+                    }
+                ]
+            }
+        ]
+    },
+    "world": {
+        "description": "you interact with the world using `Katton.world()`",
+        "properties": [
+            {
+                "name": "players",
+                "description": "a list of `player` values in the game",
+                "signature": "Katton.world().players",
+                "note": "",
+                "example": ""
+            },
+            {
+                "name": "entities",
+                "description": "every nonplayer entity currently in the world, as a list of entity values. use `world.players` instead if you want the players",
+                "signature": "Katton.world().entities",
+                "note": "",
+                "example": "for (e in Katton.world().entities) {\n    if (e.type == \"zombie\") {\n        e.setGlowing(true)\n    }\n}"
+            }
+        ],
+        "methods": [
+            {
+                "name": "spawnEntity",
+                "description": "spawns a new entity into the world",
+                "signature": "Katton.world().spawnEntity(type, location)",
+                "note": "",
+                "example": "Katton.world().spawnEntity(\"zombie\", player.location)\nfunction spawnWave(count, location) {\n    for (i in 1..count) {\n        Katton.world().spawnEntity(\"zombie\", location)\n    }\n}",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "default": "required",
+                        "description": "case insensitive entity type name string"
+                    },
+                    {
+                        "name": "location",
+                        "default": "required",
+                        "description": "location object where the entity spawns"
+                    }
+                ]
+            },
+            {
+                "name": "setBlock",
+                "description": "sets a block at a target location to a material",
+                "signature": "Katton.world().setBlock(location, material)",
+                "note": "nonblock materials like `\"diamond_sword\"` cause a runtime error",
+                "example": "Katton.world().setBlock(player.location, \"glass\")",
+                "parameters": [
+                    {
+                        "name": "location",
+                        "default": "required",
+                        "description": "target location object"
+                    },
+                    {
+                        "name": "material",
+                        "default": "required",
+                        "description": "case insensitive vanilla block material name"
+                    }
+                ]
+            },
+            {
+                "name": "getBlock",
+                "description": "gets the block material name at a target location",
+                "signature": "Katton.world().getBlock(location)",
+                "note": "",
+                "example": "val currentBlock = Katton.world().getBlock(player.location) // \"glass\"",
+                "parameters": [
+                    {
+                        "name": "location",
+                        "default": "required",
+                        "description": "target location object"
+                    }
+                ]
+            },
+            {
+                "name": "fillBlocks",
+                "description": "fills a 3D rectangular region between two corner locations with a block material",
+                "signature": "Katton.world().fillBlocks(from, to, material)",
+                "note": "",
+                "example": "Katton.world().fillBlocks({ \"x\": 0, \"y\": 60, \"z\": 0 }, { \"x\": 10, \"y\": 65, \"z\": 10 }, \"stone\")\nfunction fillLargeArea(from, to, material) {\n    // split into smaller boxes yourself and call fillBlocks per chunk\n}",
+                "parameters": [
+                    {
+                        "name": "from",
+                        "default": "required",
+                        "description": "starting corner location object or coordinates"
+                    },
+                    {
+                        "name": "to",
+                        "default": "required",
+                        "description": "ending corner location object or coordinates"
+                    },
+                    {
+                        "name": "material",
+                        "default": "required",
+                        "description": "block material name string"
+                    }
+                ]
+            },
+            {
+                "name": "playSound",
+                "description": "plays a sound effect at a world location visible/audible to everyone around it",
+                "signature": "Katton.world().playSound(sound, location, volume = 1, pitch = 1)",
+                "note": "plays at a fixed location and everyone is able to hear it, unlike `player.playSound` which plays specifically to one player",
+                "example": "Katton.world().playSound(\"entity_wither_spawn\", player.location)\nKatton.world().playSound(\"entity_wither_spawn\", player.location, volume = 2.0, pitch = 0.8)",
+                "parameters": [
+                    {
+                        "name": "sound",
+                        "default": "required",
+                        "description": "sound name string"
+                    },
+                    {
+                        "name": "location",
+                        "default": "required",
+                        "description": "fixed location object where the sound plays"
+                    },
+                    {
+                        "name": "volume",
+                        "default": "default=1",
+                        "description": "sound volume multiplier"
+                    },
+                    {
+                        "name": "pitch",
+                        "default": "default=1",
+                        "description": "sound pitch multiplier"
+                    }
+                ]
+            },
+            {
+                "name": "spawnParticle",
+                "description": "spawns particles into the world visible to all players",
+                "signature": "Katton.world().spawnParticle(particle, location, ...)",
+                "note": "visible to all players",
+                "example": "Katton.world().spawnParticle(\"flame\", player.location)\nKatton.world().spawnParticle(\"dust\", player.location, count = 20, offset = {\"x\": 1, \"y\": 1, \"z\": 1}, color = \"#ff55aa\", size = 1.5)\nKatton.world().spawnParticle(\"dust_color_transition\", player.location, count = 10, color = \"#ff0000\", to_color = \"#0000ff\", size = 2)\nKatton.world().spawnParticle(\"block\", player.location, count = 30, material = \"diamond_block\")\nKatton.world().spawnParticle(\"flame\", player.location, direction = {\"x\": 0, \"y\": 1, \"z\": 0}, speed = 0.5)",
+                "parameters": [
+                    {
+                        "name": "particle",
+                        "default": "required",
+                        "description": "case insensitive vanilla particle name string"
+                    },
+                    {
+                        "name": "location",
+                        "default": "required",
+                        "description": "target location object"
+                    },
+                    {
+                        "name": "count",
+                        "default": "default=1",
+                        "description": "how many particles to spawn (ignored if `direction` is used)"
+                    },
+                    {
+                        "name": "offset",
+                        "default": "default={\"x\":",
+                        "description": "0, \"y\": 0, \"z\": 0} spread range across axes (capped at +/-16 blocks)"
+                    },
+                    {
+                        "name": "speed",
+                        "default": "default=0",
+                        "description": "particle motion speed (0 to 10)"
+                    },
+                    {
+                        "name": "direction",
+                        "default": "default=null",
+                        "description": "single particle motion vector"
+                    },
+                    {
+                        "name": "color",
+                        "default": "default=null",
+                        "description": "hex string, map, or RGB list for dust/transition particles"
+                    },
+                    {
+                        "name": "to_color",
+                        "default": "default=null",
+                        "description": "end color for dust transition particles"
+                    },
+                    {
+                        "name": "size",
+                        "default": "default=1.0",
+                        "description": "dust particle size (0.1 to 4.0)"
+                    },
+                    {
+                        "name": "material",
+                        "default": "default=null",
+                        "description": "block or item material name for block/item particles"
+                    }
+                ]
+            }
+        ]
+    }
+}
