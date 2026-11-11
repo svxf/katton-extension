@@ -5,7 +5,7 @@ syntax highlighting, autocomplete, hover docs, linting and token export/import f
 ## how install
 
 1. in VSCode: Extensions view -> `...` menu (top right) -> **Install from VSIX...**
-2. pick `katton-lang-0.2.0.vsix`
+2. pick `katton-lang-(whatever version is newest).vsix`
 3. reload when added and then open/create a `.kat` file and done!
 
 ## how to build
